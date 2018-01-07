@@ -8,27 +8,19 @@ struct ownList {
 
 template <typename T>
 ownList<T>* mergeSort(ownList<T>* first, ownList<T>* second) {
-    ownList<T>* help = new ownList<T>;
-    ownList<T>* ret = help;
-    while(first != nullptr && second != nullptr) {
-        if (first->val < second->val) {
-            help->next = first;
-            first = first->next;
-        } else {
-            help->next = second;
-            second = second->next;
-        }
-        help = help->next;
+    if (!first) {
+        return  second;
     }
-    if (first == nullptr) {
-        help->next = second;
+    if (!second) {
+        return  first;
+    }
+    if (first->val < second->val) {
+        first->next = mergeSort(first->next, second);
+        return first;
     } else {
-        help->next = first;
+        second->next = mergeSort(first, second->next);
+        return second;
     }
-    help = ret;
-    ret = ret->next;
-    delete help;
-    return ret;
 }
 
 template <typename T>
@@ -40,8 +32,7 @@ ownList<T>* merge(ownList<T>* now) {
     ownList<T>* tmp = now;
     while (tmp->next != nullptr && tmp->next->next != nullptr) {
         second = second->next;
-        tmp = tmp->next;
-        tmp = tmp->next;
+        tmp = tmp->next->next;
     }
     tmp = second;
     second = second->next;
