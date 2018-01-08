@@ -7,7 +7,7 @@ struct ownList {
 };
 
 template <typename T>
-ownList<T>* mergeSort(ownList<T>* first, ownList<T>* second) {
+ownList<T>* merge(ownList<T>* first, ownList<T>* second) {
     if (!first) {
         return  second;
     }
@@ -15,16 +15,16 @@ ownList<T>* mergeSort(ownList<T>* first, ownList<T>* second) {
         return  first;
     }
     if (first->val < second->val) {
-        first->next = mergeSort(first->next, second);
+        first->next = merge(first->next, second);
         return first;
     } else {
-        second->next = mergeSort(first, second->next);
+        second->next = merge(first, second->next);
         return second;
     }
 }
 
 template <typename T>
-ownList<T>* merge(ownList<T>* now) {
+ownList<T>* divide(ownList<T>* now) {
     if (now == nullptr || now->next == nullptr) {
         return now;
     }
@@ -37,7 +37,7 @@ ownList<T>* merge(ownList<T>* now) {
     tmp = second;
     second = second->next;
     tmp->next = nullptr;
-    return mergeSort(merge(now), merge(second));
+    return merge(divide(now), divide(second));
 }
 
 int main() {
@@ -53,7 +53,7 @@ int main() {
         tmp->next = head;
         head = tmp;
     }
-    head = merge(head);
+    head = divide(head);
     while (head != nullptr) {
         std::cout << head->val << " ";
         ownList<int>* forDelete = head;
